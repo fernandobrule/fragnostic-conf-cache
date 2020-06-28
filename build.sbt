@@ -69,7 +69,6 @@ lazy val fragnosticConf = Project(
       logbackClassic,
       slf4jApi,
       scalatest,
-      fragnosticConfSupport,
       fragnosticConfEnv,
       jedis
     ) ++ specs2.map(_ % "test"),

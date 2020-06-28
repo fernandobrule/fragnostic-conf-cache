@@ -2,19 +2,11 @@ package com.fragnostic.conf.cache.service.api
 
 import java.util.Locale
 
-trait ConfCacheServiceApi {
+trait CacheServiceApi {
 
-  def confCacheServiceApi: ConfCacheServiceApi
+  def cacheServiceApi: CacheServiceApi
 
-  trait ConfCacheServiceApi {
-
-    def set(key: String, value: String): Either[String, String]
-
-    def set(key: String, value: Short): Either[String, String]
-
-    def set(key: String, value: Int): Either[String, String]
-
-    def set(key: String, value: Long): Either[String, String]
+  trait CacheServiceApi {
 
     def getString(key: String): Either[String, Option[String]]
 
@@ -25,6 +17,14 @@ trait ConfCacheServiceApi {
     def getInt(key: String): Either[String, Option[Int]]
 
     def getLong(key: String): Either[String, Option[Long]]
+
+    def set(key: String, value: String): Either[String, String]
+
+    def set(key: String, value: Short): Either[String, String]
+
+    def set(key: String, value: Int): Either[String, String]
+
+    def set(key: String, value: Long): Either[String, String]
 
     def del(key: String): Either[String, Option[String]]
 

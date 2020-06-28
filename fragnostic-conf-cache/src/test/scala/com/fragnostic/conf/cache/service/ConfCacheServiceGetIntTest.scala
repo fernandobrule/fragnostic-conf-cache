@@ -1,6 +1,6 @@
 package com.fragnostic.conf.cache.service
 
-import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheServiceApi.{ del, set }
+import com.fragnostic.conf.cache.service.CakeCacheService.cacheServiceApi.{ del, set }
 import com.fragnostic.conf.cache.service.support.LifeCycleSupportCache
 
 class ConfCacheServiceGetIntTest extends LifeCycleSupportCache {
@@ -17,7 +17,7 @@ class ConfCacheServiceGetIntTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Int from Cache") {
 
-      val opt = CakeConfCacheService.confCacheServiceApi.getInt(key = keyInt) fold (
+      val opt = CakeConfCacheService.confServiceApi.getInt(key = keyInt) fold (
         error => throw new IllegalStateException(error),
         opt => opt)
 

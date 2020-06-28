@@ -1,6 +1,6 @@
 package com.fragnostic.conf.cache.service
 
-import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheServiceApi.{ del, set }
+import com.fragnostic.conf.cache.service.CakeCacheService.cacheServiceApi.{ del, set }
 import com.fragnostic.conf.cache.service.support.LifeCycleSupportCache
 
 class ConfCacheServiceGetShortTest extends LifeCycleSupportCache {
@@ -17,7 +17,7 @@ class ConfCacheServiceGetShortTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Short from Cache") {
 
-      val opt = CakeConfCacheService.confCacheServiceApi.getShort(key = keyShort) fold (
+      val opt = CakeConfCacheService.confServiceApi.getShort(key = keyShort) fold (
         error => throw new IllegalStateException(error),
         opt => opt)
 
