@@ -18,6 +18,8 @@ trait CacheServiceApi {
 
     def getLong(key: String): Either[String, Option[Long]]
 
+    def getBoolean(key: String): Either[String, Option[Boolean]]
+
     def set(key: String, value: String): Either[String, String]
 
     def set(key: String, value: Short): Either[String, String]
@@ -25,6 +27,8 @@ trait CacheServiceApi {
     def set(key: String, value: Int): Either[String, String]
 
     def set(key: String, value: Long): Either[String, String]
+
+    def set(key: String, value: Boolean): Either[String, String]
 
     def del(key: String): Either[String, Option[String]]
 

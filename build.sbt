@@ -43,14 +43,46 @@ lazy val frgConfCacheSettings = Seq(
   scalacOptions in (c, console) --= unusedOptions.value
 )
 
+lazy val manifestSetting = packageOptions += {
+  Package.ManifestAttributes(
+    "Created-By" -> "Simple Build Tool",
+    "Built-By" -> System.getProperty("user.name"),
+    "Build-Jdk" -> System.getProperty("java.version"),
+    "Specification-Title" -> name.value,
+    "Specification-Version" -> version.value,
+    "Specification-Vendor" -> organization.value,
+    "Implementation-Title" -> name.value,
+    "Implementation-Version" -> version.value,
+    "Implementation-Vendor-Id" -> organization.value,
+    "Implementation-Vendor" -> organization.value
+  )
+}
+
+// Things we care about primarily because Maven Central demands them
+lazy val mavenCentralFrouFrou = Seq(
+  homepage := Some(new URL("http://www.fragnostic.com.br")),
+  startYear := Some(2020),
+  pomExtra := pomExtra.value ++ Group(
+    <developers>
+      <developer>
+        <id>fbrule</id>
+        <name>Fernando Brûlé</name>
+        <url>https://github.com/fernandobrule</url>
+      </developer>
+    </developers>
+  )
+)
+
+lazy val doNotPublish = Seq(publish := {}, publishLocal := {}, PgpKeys.publishSigned := {}, PgpKeys.publishLocalSigned := {})
+
 lazy val frgConfCacheProject = Project(
   id = "fragnostic-conf-cache-project",
   base = file(".")).settings(
     frgConfCacheSettings ++ Seq(
-    name := "fragnostic conf cache",
+    name := "fragnostic conf cache project",
     artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
     packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
-    description := "fragnostic conf cache",
+    description := "A Fragnostic Conf Cache",
     shellPrompt := { state =>
       s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
     }
@@ -75,35 +107,3 @@ lazy val frgConfCache = Project(
 ) dependsOn(
   //
 )
-
-lazy val manifestSetting = packageOptions += {
-  Package.ManifestAttributes(
-    "Created-By" -> "Simple Build Tool",
-    "Built-By" -> System.getProperty("user.name"),
-    "Build-Jdk" -> System.getProperty("java.version"),
-    "Specification-Title" -> name.value,
-    "Specification-Version" -> version.value,
-    "Specification-Vendor" -> organization.value,
-    "Implementation-Title" -> name.value,
-    "Implementation-Version" -> version.value,
-    "Implementation-Vendor-Id" -> organization.value,
-    "Implementation-Vendor" -> organization.value
-  )
-}
-
-// Things we care about primarily because Maven Central demands them
-lazy val mavenCentralFrouFrou = Seq(
-  homepage := Some(new URL("http://www.notyet.com.br")),
-  startYear := Some(2019),
-  pomExtra := pomExtra.value ++ Group(
-    <developers>
-      <developer>
-        <id>fbrule</id>
-        <name>Fernando Brûlé</name>
-        <url>https://github.com/fernandobrule</url>
-      </developer>
-    </developers>
-  )
-)
-
-lazy val doNotPublish = Seq(publish := {}, publishLocal := {}, PgpKeys.publishSigned := {}, PgpKeys.publishLocalSigned := {})
