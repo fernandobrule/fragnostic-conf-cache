@@ -34,6 +34,11 @@ trait CacheServiceImpl extends CacheServiceApi {
         error => Left(error),
         opt => toLong(opt))
 
+    override def getBoolean(key: String): Either[String, Option[Boolean]] =
+      getString(key) fold (
+        error => Left(error),
+        opt => toBoolean(opt))
+
     override def set(key: String, value: String): Either[String, String] =
       confCacheCrud.set(key, value) fold (
         error => Left("conf.cache.service.set.error"),
@@ -51,6 +56,9 @@ trait CacheServiceImpl extends CacheServiceApi {
       set(key, value.toString)
 
     override def set(key: String, value: Long): Either[String, String] =
+      set(key, value.toString)
+
+    override def set(key: String, value: Boolean): Either[String, String] =
       set(key, value.toString)
 
     override def del(key: String): Either[String, Option[String]] =

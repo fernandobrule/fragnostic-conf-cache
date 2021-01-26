@@ -22,6 +22,9 @@ trait ConfCacheServiceImpl extends ConfServiceApi {
     override def getLong(key: String): Either[String, Option[Long]] =
       CakeCacheService.cacheServiceApi.getLong(key)
 
+    override def getBoolean(key: String): Either[String, Option[Boolean]] =
+      CakeCacheService.cacheServiceApi.getBoolean(key)
+
   }
 
 }

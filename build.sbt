@@ -1,4 +1,4 @@
-import com.typesafe.sbt.pgp.PgpKeys
+import com.jsuereth.sbtpgp.PgpKeys
 import scala.xml._
 import java.net.URL
 import Dependencies._
@@ -12,11 +12,11 @@ val unusedOptions = Def.setting(
   }
 )
 
-lazy val scalatraSettings = Seq(
+lazy val frgConfCacheSettings = Seq(
   organization := "com.fragnostic",
   fork in Test := true,
   baseDirectory in Test := file("."),
-  crossScalaVersions := Seq("2.12.11", "2.11.12", "2.13.1"),
+  crossScalaVersions := Seq("2.12.11", "2.11.12", "2.13.3"),
   scalaVersion := crossScalaVersions.value.head,
   scalacOptions ++= unusedOptions.value,
   scalacOptions ++= Seq(
@@ -39,43 +39,8 @@ lazy val scalatraSettings = Seq(
     "org.scala-lang" % "scala-reflect"  % scalaVersion.value,
     "org.scala-lang" % "scala-compiler" % scalaVersion.value
   )
-) ++ Seq(Compile, Test).flatMap(c =>
+) ++ mavenCentralFrouFrou ++ Seq(Compile, Test).flatMap(c =>
   scalacOptions in (c, console) --= unusedOptions.value
-)
-
-lazy val fragnosticConfProject = Project(
-  id = "fragnostic-conf-cache",
-  base = file(".")).settings(
-    scalatraSettings ++ Seq(
-    name := "fragnostic conf cache",
-    artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
-    packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
-    description := "fragnostic conf cache",
-    shellPrompt := { state =>
-      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
-    }
-  ) ++ Defaults.packageTaskSettings(
-    packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
-  )).aggregate(
-    fragnosticConf
-  ).enablePlugins(ScalaUnidocPlugin)
-
-
-lazy val fragnosticConf = Project(
-  id = "fragnostic-conf-cache",
-  base = file("fragnostic-conf-cache")).settings(
-    scalatraSettings ++ Seq(
-    libraryDependencies ++= Seq(
-      logbackClassic,
-      slf4jApi,
-      scalatest,
-      fragnosticConfEnv,
-      jedis
-    ) ++ specs2.map(_ % "test"),
-    description := "fragnostic-conf-cache"
-  )
-) dependsOn(
-  // some module
 )
 
 lazy val manifestSetting = packageOptions += {
@@ -93,5 +58,52 @@ lazy val manifestSetting = packageOptions += {
   )
 }
 
+// Things we care about primarily because Maven Central demands them
+lazy val mavenCentralFrouFrou = Seq(
+  homepage := Some(new URL("http://www.fragnostic.com.br")),
+  startYear := Some(2020),
+  pomExtra := pomExtra.value ++ Group(
+    <developers>
+      <developer>
+        <id>fbrule</id>
+        <name>Fernando Brûlé</name>
+        <url>https://github.com/fernandobrule</url>
+      </developer>
+    </developers>
+  )
+)
+
 lazy val doNotPublish = Seq(publish := {}, publishLocal := {}, PgpKeys.publishSigned := {}, PgpKeys.publishLocalSigned := {})
 
+lazy val frgConfCacheProject = Project(
+  id = "fragnostic-conf-cache-project",
+  base = file(".")).settings(
+    frgConfCacheSettings ++ Seq(
+    name := "fragnostic conf cache project",
+    artifacts := Classpaths.artifactDefs(Seq(packageDoc in Compile, makePom in Compile)).value,
+    packagedArtifacts := Classpaths.packaged(Seq(packageDoc in Compile, makePom in Compile)).value,
+    description := "A Fragnostic Conf Cache",
+    shellPrompt := { state =>
+      s"sbt:${Project.extract(state).currentProject.id}" + Def.withColor("> ", Option(scala.Console.CYAN))
+    }
+  ) ++ Defaults.packageTaskSettings(
+    packageDoc in Compile, (unidoc in Compile).map(_.flatMap(Path.allSubpaths))
+  )).aggregate(
+    frgConfCache
+  ).enablePlugins(ScalaUnidocPlugin)
+
+lazy val frgConfCache = Project(
+  id = "fragnostic-conf-cache",
+  base = file("fragnostic-conf-cache")).settings(frgConfCacheSettings ++ Seq(
+    libraryDependencies ++= Seq(
+      logbackClassic,
+      slf4jApi,
+      scalatest,
+      fragnosticConfEnv,
+      jedis
+    ),
+    description := "fragnostic conf cache"
+  )
+) dependsOn(
+  //
+)
