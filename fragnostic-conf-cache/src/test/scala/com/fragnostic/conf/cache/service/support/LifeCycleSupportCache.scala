@@ -45,4 +45,10 @@ trait LifeCycleSupportCache extends FunSpec with Matchers with BeforeAndAfterEac
   val keyLong: String = "key.long"
   val valueLong: Long = 789L
 
+  //
+  // Boolean
+  //
+  val keyBoolean: String = "key.boolean"
+  val valueBoolean: Boolean = true
+
 }
