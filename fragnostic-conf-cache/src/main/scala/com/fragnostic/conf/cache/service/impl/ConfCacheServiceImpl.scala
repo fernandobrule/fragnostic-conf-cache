@@ -1,18 +1,18 @@
 package com.fragnostic.conf.cache.service.impl
 
-import java.util.Locale
-import com.fragnostic.conf.base.service.support.{ KeySupport, TypesSupport }
+import com.fragnostic.conf.base.service.api.ConfServiceApi
+import com.fragnostic.conf.base.service.support.{ KeyComposeSupport, TypesSupport }
 import com.fragnostic.conf.cache.dao.api.ConfCacheDaoApi
-import com.fragnostic.conf.cache.service.api.ConfCacheServiceApi
 
 import java.util
+import java.util.Locale
 
-trait ConfCacheServiceImpl extends ConfCacheServiceApi {
+trait ConfCacheServiceImpl extends ConfServiceApi {
   this: ConfCacheDaoApi =>
 
-  def confCacheServiceApi: ConfCacheServiceApi = new DefaultConfCacheService
+  def confServiceApi = new DefaultConfCacheService
 
-  class DefaultConfCacheService extends ConfCacheServiceApi with TypesSupport with KeySupport {
+  class DefaultConfCacheService extends ConfServiceApi with TypesSupport with KeyComposeSupport {
 
     private val OK = "OK"
 
@@ -20,7 +20,7 @@ trait ConfCacheServiceImpl extends ConfCacheServiceApi {
       confCacheCrud.get(key)
 
     override def getString(locale: Locale, key: String): Either[String, Option[String]] =
-      confCacheCrud.get(compose(Some(locale), key))
+      confCacheCrud.get(compose(locale, key))
 
     override def getShort(key: String): Either[String, Option[Short]] =
       getString(key) fold (
@@ -42,7 +42,7 @@ trait ConfCacheServiceImpl extends ConfCacheServiceApi {
         error => Left(error),
         opt => toBoolean(opt))
 
-    override def set(key: String, value: String): Either[String, String] =
+    def set(key: String, value: String): Either[String, String] =
       confCacheCrud.set(key, value) fold (
         error => Left("conf.cache.service.set.error"),
         statusCodeReply =>
@@ -52,25 +52,25 @@ trait ConfCacheServiceImpl extends ConfCacheServiceApi {
             Left("conf.cache.service.set.error")
           })
 
-    override def set(key: String, value: Short): Either[String, String] =
+    def set(key: String, value: Short): Either[String, String] =
       set(key, value.toString)
 
-    override def set(key: String, value: Int): Either[String, String] =
+    def set(key: String, value: Int): Either[String, String] =
       set(key, value.toString)
 
-    override def set(key: String, value: Long): Either[String, String] =
+    def set(key: String, value: Long): Either[String, String] =
       set(key, value.toString)
 
-    override def set(key: String, value: Boolean): Either[String, String] =
+    def set(key: String, value: Boolean): Either[String, String] =
       set(key, value.toString)
 
-    override def del(key: String): Either[String, Option[String]] =
+    def del(key: String): Either[String, Option[String]] =
       confCacheCrud.del(key)
 
-    override def getAllKeys: util.List[String] =
+    def getAllKeys: util.List[String] =
       confCacheCrud.getAllKeys
 
-    override def delAllKeys: Either[String, String] =
+    def delAllKeys: Either[String, String] =
       if (confCacheCrud.delAllKeys.contains(OK)) Right("conf.cache.service.del.all.keys.success")
       else Left("conf.cache.service.del.all.keys.error")
 

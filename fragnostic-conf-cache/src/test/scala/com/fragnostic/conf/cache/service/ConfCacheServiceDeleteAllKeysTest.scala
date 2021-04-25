@@ -1,6 +1,6 @@
 package com.fragnostic.conf.cache.service
 
-import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheServiceApi.set
+import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheService.set
 import com.fragnostic.conf.cache.service.support.LifeCycleSupportCache
 
 class ConfCacheServiceDeleteAllKeysTest extends LifeCycleSupportCache {
@@ -20,16 +20,16 @@ class ConfCacheServiceDeleteAllKeysTest extends LifeCycleSupportCache {
 
     it("Can Delete All Keys") {
 
-      val size: Int = CakeConfCacheService.confCacheServiceApi.getAllKeys.size()
+      val size: Int = CakeConfCacheService.confCacheService.getAllKeys.size()
       size should be >= 5
 
-      val message: String = CakeConfCacheService.confCacheServiceApi.delAllKeys fold (
+      val message: String = CakeConfCacheService.confCacheService.delAllKeys fold (
         error => error,
         message => message)
 
       message should be("conf.cache.service.del.all.keys.success")
 
-      val zeroSize: Int = CakeConfCacheService.confCacheServiceApi.getAllKeys.size()
+      val zeroSize: Int = CakeConfCacheService.confCacheService.getAllKeys.size()
       zeroSize should be(0)
 
     }

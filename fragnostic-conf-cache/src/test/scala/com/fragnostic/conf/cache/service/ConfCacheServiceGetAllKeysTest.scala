@@ -1,6 +1,6 @@
 package com.fragnostic.conf.cache.service
 
-import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheServiceApi.set
+import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheService.set
 import com.fragnostic.conf.cache.service.support.LifeCycleSupportCache
 
 import java.util
@@ -9,7 +9,7 @@ class ConfCacheServiceGetAllKeysTest extends LifeCycleSupportCache {
 
   override def beforeEach(): Unit = {
 
-    CakeConfCacheService.confCacheServiceApi.delAllKeys fold (
+    CakeConfCacheService.confCacheService.delAllKeys fold (
       error => throw new IllegalStateException(error),
       message => message)
 
@@ -27,7 +27,7 @@ class ConfCacheServiceGetAllKeysTest extends LifeCycleSupportCache {
 
     it("Can Get All Keys") {
 
-      val allKeys: util.List[String] = CakeConfCacheService.confCacheServiceApi.getAllKeys
+      val allKeys: util.List[String] = CakeConfCacheService.confCacheService.getAllKeys
 
       allKeys.size() should be(5)
       allKeys.contains("1") should be(true)

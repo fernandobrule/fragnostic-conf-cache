@@ -1,6 +1,6 @@
 package com.fragnostic.conf.cache.service
 
-import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheServiceApi.{ del, set }
+import com.fragnostic.conf.cache.service.CakeConfCacheService.confCacheService.{ del, set }
 import com.fragnostic.conf.cache.service.support.LifeCycleSupportCache
 
 class ConfCacheServiceGetLongTest extends LifeCycleSupportCache {
@@ -17,7 +17,7 @@ class ConfCacheServiceGetLongTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Long from Cache") {
 
-      val opt = CakeConfCacheService.confCacheServiceApi.getLong(key = keyLong) fold (
+      val opt = CakeConfCacheService.confCacheService.getLong(key = keyLong) fold (
         error => throw new IllegalStateException(error),
         opt => opt)
 

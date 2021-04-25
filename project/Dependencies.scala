@@ -10,7 +10,7 @@ object Dependencies {
   lazy val scalatest =         "org.scalatest"  %% "scalatest"                % "3.0.8" % "test"
   lazy val jedis =             "redis.clients"  %  "jedis"                    % "3.6.0"
 
-  lazy val fragnosticConfEnv = "com.fragnostic" %  "fragnostic-conf-env_2.13" % "0.1.3-SNAPSHOT"
+  lazy val fragnosticConfEnv = "com.fragnostic" %  "fragnostic-conf-env_2.13" % "0.1.3"
   
   lazy val specs2 =  Seq("org.specs2" %% "specs2-core",
                          "org.specs2" %% "specs2-mock",
