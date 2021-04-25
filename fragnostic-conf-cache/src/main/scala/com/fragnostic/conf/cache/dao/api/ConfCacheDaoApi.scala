@@ -1,5 +1,7 @@
 package com.fragnostic.conf.cache.dao.api
 
+import java.util
+
 trait ConfCacheDaoApi {
 
   def confCacheCrud: ConfCacheCrud
@@ -18,7 +20,9 @@ trait ConfCacheDaoApi {
 
     def del(key: String): Either[String, Option[String]]
 
-    def delAllKeys(): String
+    def getAllKeys: util.List[String]
+
+    def delAllKeys: String
 
   }
 
