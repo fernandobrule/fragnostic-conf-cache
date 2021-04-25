@@ -1,8 +1,8 @@
 package com.fragnostic.conf.cache.service.support
 
-import java.util.Locale
-
 import org.scalatest.{ BeforeAndAfterEach, FunSpec, Matchers }
+
+import java.util.Locale
 
 trait LifeCycleSupportCache extends FunSpec with Matchers with BeforeAndAfterEach {
 

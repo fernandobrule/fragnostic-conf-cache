@@ -2,15 +2,16 @@ package com.fragnostic.conf.cache.dao.impl
 
 import com.fragnostic.conf.cache.dao.api.ConfCacheDaoApi
 import org.slf4j.{ Logger, LoggerFactory }
-import redis.clients.jedis.Jedis
+import redis.clients.jedis.{ Jedis, ScanParams, ScanResult }
 
+import java.util
 import scala.util.Try
 
-trait RedisDaoImpl extends ConfCacheDaoApi with RedisConnectionAgnostic {
+trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic {
 
-  def confCacheCrud: ConfCacheCrud = new RedisDaoImpl(jedis)
+  def confCacheCrud: ConfCacheCrud = new ConfCacheDaoRedisImpl(jedis)
 
-  class RedisDaoImpl(val jedis: Jedis) extends ConfCacheCrud {
+  class ConfCacheDaoRedisImpl(val jedis: Jedis) extends ConfCacheCrud {
 
     private[this] val logger: Logger = LoggerFactory.getLogger(getClass.getName)
 
@@ -42,7 +43,17 @@ trait RedisDaoImpl extends ConfCacheDaoApi with RedisConnectionAgnostic {
         opt => opt map (
           value => if (jedis.del(key) == 1) Right(Option(value)) else Left("redis.dao.del.error")) getOrElse Right(None))
 
-    override def delAllKeys(): String =
+    override def getAllKeys: util.List[String] = {
+
+      val cursor: String = ""
+      val scanParams: ScanParams = new ScanParams()
+      scanParams.`match`("*")
+      val scanResult: ScanResult[String] = jedis.scan(cursor, scanParams)
+      scanResult.getResult
+
+    }
+
+    override def delAllKeys: String =
       jedis.flushAll()
 
   }
