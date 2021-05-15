@@ -1,9 +1,9 @@
 package com.fragnostic.conf.cache.dao.impl
 
-import redis.clients.jedis.Jedis
+import io.lettuce.core.api.sync.RedisCommands
 
 trait RedisConnectionAgnostic {
 
-  val jedis: Jedis
+  val cache: RedisCommands[String, String]
 
 }
