@@ -14,6 +14,10 @@ object CakeConfCacheService {
 
   private val redisCommands: RedisCommands[String, String] = {
 
+    if (logger.isInfoEnabled) {
+      logger.info(s"redisCommands - enter")
+    }
+
     val host: String = CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
       error => throw new IllegalStateException(error),
       opt => opt map (host => host) getOrElse {
@@ -34,13 +38,19 @@ object CakeConfCacheService {
     try {
       val connection: StatefulRedisConnection[String, String] = client.connect()
       val redisCommands: RedisCommands[String, String] = connection.sync()
+      if (logger.isInfoEnabled) {
+        logger.info(s"redisCommands - OK")
+      }
+
       redisCommands
     } catch {
       case e: RedisConnectionException =>
         logger.error(s"redisCommands - RedisConnectionException - ${e.getMessage}")
+        // TODO
         ???
       case e: Throwable =>
         logger.error(s"redisCommands - Throwable - ${e.getMessage}")
+        // TODO
         ???
     }
 

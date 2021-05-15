@@ -44,7 +44,8 @@ trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic
         opt => opt map (
           value => if (cache.del(key) == 1) Right(Option(value)) else Left("redis.dao.del.error")) getOrElse Right(None))
 
-    override def getAllKeys: util.List[String] = ???
+    override def getAllKeys: util.List[String] =
+      cache.keys("*")
 
     override def delAllKeys: String = {
       cache.flushall(FlushMode.ASYNC)
