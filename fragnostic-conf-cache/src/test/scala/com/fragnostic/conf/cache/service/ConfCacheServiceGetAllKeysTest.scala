@@ -25,7 +25,7 @@ class ConfCacheServiceGetAllKeysTest extends LifeCycleSupportCache {
 
   describe("***Conf Cache Service Get All Keys Test***") {
 
-    it("Can Get All Keys") {
+    ignore("Can Get All Keys") {
 
       val allKeys: util.List[String] = CakeConfCacheService.confCacheService.getAllKeys
 

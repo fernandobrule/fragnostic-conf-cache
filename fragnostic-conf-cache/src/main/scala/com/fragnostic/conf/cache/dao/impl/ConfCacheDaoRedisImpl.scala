@@ -1,22 +1,23 @@
 package com.fragnostic.conf.cache.dao.impl
 
 import com.fragnostic.conf.cache.dao.api.ConfCacheDaoApi
+import io.lettuce.core.FlushMode
+import io.lettuce.core.api.sync.RedisCommands
 import org.slf4j.{ Logger, LoggerFactory }
-import redis.clients.jedis.{ Jedis, ScanParams, ScanResult }
 
 import java.util
 import scala.util.Try
 
 trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic {
 
-  def confCacheCrud: ConfCacheCrud = new ConfCacheDaoRedisImpl(jedis)
+  def confCacheCrud: ConfCacheCrud = new ConfCacheDaoRedisImpl(cache)
 
-  class ConfCacheDaoRedisImpl(val jedis: Jedis) extends ConfCacheCrud {
+  class ConfCacheDaoRedisImpl(val cache: RedisCommands[String, String]) extends ConfCacheCrud {
 
     private[this] val logger: Logger = LoggerFactory.getLogger(getClass.getName)
 
     override def set(key: String, value: String): Either[String, String] =
-      Try(jedis.set(key, value)) fold (
+      Try(cache.set(key, value)) fold (
         error => {
           logger.error(s"set() - error on set key[$key] with value[$value], ${error.getMessage}")
           Left(error.getMessage)
@@ -30,7 +31,7 @@ trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic
     override def set(key: String, value: Long): Either[String, String] = ???
 
     override def get(key: String): Either[String, Option[String]] =
-      Try(jedis.get(key)) fold (
+      Try(cache.get(key)) fold (
         error => {
           logger.error(s"get() - error on try to retrieve key[$key], ${error.getMessage}")
           Left(error.getMessage)
@@ -41,20 +42,13 @@ trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic
       get(key) fold (
         error => Left(error),
         opt => opt map (
-          value => if (jedis.del(key) == 1) Right(Option(value)) else Left("redis.dao.del.error")) getOrElse Right(None))
+          value => if (cache.del(key) == 1) Right(Option(value)) else Left("redis.dao.del.error")) getOrElse Right(None))
 
-    override def getAllKeys: util.List[String] = {
+    override def getAllKeys: util.List[String] = ???
 
-      val cursor: String = ""
-      val scanParams: ScanParams = new ScanParams()
-      scanParams.`match`("*")
-      val scanResult: ScanResult[String] = jedis.scan(cursor, scanParams)
-      scanResult.getResult
-
+    override def delAllKeys: String = {
+      cache.flushall(FlushMode.ASYNC)
     }
-
-    override def delAllKeys: String =
-      jedis.flushAll()
 
   }
 

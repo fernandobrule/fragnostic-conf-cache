@@ -3,41 +3,53 @@ package com.fragnostic.conf.cache.service
 import com.fragnostic.conf.cache.dao.impl.ConfCacheDaoRedisImpl
 import com.fragnostic.conf.cache.service.impl.ConfCacheServiceImpl
 import com.fragnostic.conf.env.service.CakeConfEnvService
+import io.lettuce.core.{ RedisClient, RedisConnectionException }
+import io.lettuce.core.api.StatefulRedisConnection
+import io.lettuce.core.api.sync.RedisCommands
 import org.slf4j.{ Logger, LoggerFactory }
-import redis.clients.jedis.Jedis
 
 object CakeConfCacheService {
 
-  private[this] val logger: Logger = LoggerFactory.getLogger(getClass.getName)
+  private[this] val logger: Logger = LoggerFactory.getLogger("CakeConfCacheService")
 
-  private val jedisInstance: Jedis = {
+  private val redisCommands: RedisCommands[String, String] = {
 
     val host: String = CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
       error => throw new IllegalStateException(error),
       opt => opt map (host => host) getOrElse {
-        logger.error("jedisInstance - tienes que setear la variable de ambiente REDIS_HOST")
+        logger.error("redisCommands - tienes que setear la variable de ambiente REDIS_HOST")
         throw new IllegalStateException("cake.conf.cache.error.host.does.not.exists")
       })
 
     val port: Int = CakeConfEnvService.confEnvService.getInt(key = "REDIS_PORT") fold (
       error => throw new IllegalStateException(error),
       opt => opt map (host => host) getOrElse {
-        logger.error("jedisInstance - tienes que setear la variable de ambiente REDIS_PORT")
+        logger.error("redisCommands - tienes que setear la variable de ambiente REDIS_PORT")
         throw new IllegalStateException("cake.conf.cache.error.port.does.not.exists")
       })
 
-    new Jedis(host, port)
-  }
+    // https://lettuce.io/core/release/reference/index.html#redisuri.uri-syntax
+    val uri: String = s"redis://$host:${port}"
+    val client: RedisClient = RedisClient.create(uri)
+    try {
+      val connection: StatefulRedisConnection[String, String] = client.connect()
+      val redisCommands: RedisCommands[String, String] = connection.sync()
+      redisCommands
+    } catch {
+      case e: RedisConnectionException =>
+        logger.error(s"redisCommands - RedisConnectionException - ${e.getMessage}")
+        ???
+      case e: Throwable =>
+        logger.error(s"redisCommands - Throwable - ${e.getMessage}")
+        ???
+    }
 
-  /*val cacheServiceApi = new CacheServiceImpl with ConfCacheDaoRedisImpl {
-    override val jedis: Jedis = jedisInstance
-  }.cacheServiceApi
-  */
+  }
 
   lazy val confCacheService = confCacheServicePiece.confServiceApi
 
   lazy val confCacheServicePiece = new ConfCacheServiceImpl with ConfCacheDaoRedisImpl {
-    override val jedis: Jedis = jedisInstance
+    override val cache: RedisCommands[String, String] = redisCommands
   }
 
 }
