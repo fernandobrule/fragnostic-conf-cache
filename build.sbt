@@ -100,7 +100,7 @@ lazy val frgConfCache = Project(
       slf4jApi,
       scalatest,
       fragnosticConfEnv,
-      jedis
+      lettuce
     ),
     description := "fragnostic conf cache"
   )

@@ -1,16 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
+
 <configuration>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>fragnostic conf cache - [%4level] [%d{HH:mm:ss.SSS}] [%thread] %logger{4} : %m%n</pattern>
-        </encoder>
-    </appender>
+   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+         <pattern>frg*conf*cache - %-5level %logger{36} - %msg%n</pattern>
+      </encoder>
+   </appender>
 
-    <!--logger name="com.fragnostic.dao" level="INFO"/-->
+   <logger name="com.fragnostic.conf.props.service" level="WARN"/>
+   <logger name="com.fragnostic.dao" level="WARN"/>
 
-    <root level="warn">
-        <appender-ref ref="STDOUT"/>
-    </root>
+   <logger name="cl.atacamasoft.focused.calendar.dao" level="WARN"/>
+   <logger name="cl.atacamasoft.focused.calendar.service.i18n" level="WARN"/>
+   <logger name="cl.atacamasoft.focused.calendar.dao.support.ConversionSupport" level="WARN"/>
+   <logger name="cl.atacamasoft.focused.calendar.service.impl" level="WARN"/>
+
+   <root level="INFO">
+      <appender-ref ref="STDOUT" />
+   </root>
 
 </configuration>
+
