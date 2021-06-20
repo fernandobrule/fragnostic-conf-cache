@@ -67,12 +67,14 @@ trait ConfCacheServiceImpl extends ConfServiceApi {
     def del(key: String): Either[String, Option[String]] =
       confCacheCrud.del(key)
 
-    def getAllKeys: util.List[String] =
+    def getAllKeys: Either[String, util.List[String]] =
       confCacheCrud.getAllKeys
 
     def delAllKeys: Either[String, String] =
-      if (confCacheCrud.delAllKeys.contains(OK)) Right("conf.cache.service.del.all.keys.success")
-      else Left("conf.cache.service.del.all.keys.error")
+      confCacheCrud.delAllKeys fold (
+        error => Left(error),
+        ans => if (ans.contains(OK)) Right("conf.cache.service.del.all.keys.success")
+        else Left("conf.cache.service.del.all.keys.error"))
 
   }
 

@@ -20,9 +20,9 @@ trait ConfCacheDaoApi {
 
     def del(key: String): Either[String, Option[String]]
 
-    def getAllKeys: util.List[String]
+    def getAllKeys: Either[String, util.List[String]]
 
-    def delAllKeys: String
+    def delAllKeys: Either[String, String]
 
   }
 

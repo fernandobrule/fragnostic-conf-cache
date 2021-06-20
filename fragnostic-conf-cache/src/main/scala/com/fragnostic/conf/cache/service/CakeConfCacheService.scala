@@ -12,54 +12,44 @@ object CakeConfCacheService {
 
   private[this] val logger: Logger = LoggerFactory.getLogger("CakeConfCacheService")
 
-  private val redisCommands: RedisCommands[String, String] = {
-
-    if (logger.isInfoEnabled) {
-      logger.info(s"redisCommands - enter")
-    }
-
-    val host: String = CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
+  private def getRedisHost: String =
+    CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
       error => throw new IllegalStateException(error),
       opt => opt map (host => host) getOrElse {
-        logger.error("redisCommands - tienes que setear la variable de ambiente REDIS_HOST")
+        logger.error(s"redisCommands - It appears that you forget to set the REDIS_HOST environment variable")
         throw new IllegalStateException("cake.conf.cache.error.host.does.not.exists")
       })
 
-    val port: Int = CakeConfEnvService.confEnvService.getInt(key = "REDIS_PORT") fold (
+  private def getRedisPort: Int =
+    CakeConfEnvService.confEnvService.getInt(key = "REDIS_PORT") fold (
       error => throw new IllegalStateException(error),
-      opt => opt map (host => host) getOrElse {
-        logger.error("redisCommands - tienes que setear la variable de ambiente REDIS_PORT")
+      opt => opt map (port => port) getOrElse {
+        logger.error(s"redisCommands - It appears that you forget to set the REDIS_PORT environment variable")
         throw new IllegalStateException("cake.conf.cache.error.port.does.not.exists")
       })
 
-    // https://lettuce.io/core/release/reference/index.html#redisuri.uri-syntax
-    val uri: String = s"redis://$host:${port}"
-    val client: RedisClient = RedisClient.create(uri)
+  private def getRedisCommands: Either[String, RedisCommands[String, String]] =
     try {
+      val host: String = getRedisHost
+      val port: Int = getRedisPort
+      val uri: String = s"redis://$host:${port}" // https://lettuce.io/core/release/reference/index.html#redisuri.uri-syntax
+      val client: RedisClient = RedisClient.create(uri)
       val connection: StatefulRedisConnection[String, String] = client.connect()
       val redisCommands: RedisCommands[String, String] = connection.sync()
-      if (logger.isInfoEnabled) {
-        logger.info(s"redisCommands - OK")
-      }
-
-      redisCommands
+      Right(redisCommands)
     } catch {
       case e: RedisConnectionException =>
         logger.error(s"redisCommands - RedisConnectionException - ${e.getMessage}")
-        // TODO
-        ???
+        Left(s"cake.conf.cache.service.error.redis.connection.exception")
       case e: Throwable =>
         logger.error(s"redisCommands - Throwable - ${e.getMessage}")
-        // TODO
-        ???
+        Left(s"cake.conf.cache.service.error_${e.getMessage}")
     }
-
-  }
 
   lazy val confCacheService = confCacheServicePiece.confServiceApi
 
   lazy val confCacheServicePiece = new ConfCacheServiceImpl with ConfCacheDaoRedisImpl {
-    override val cache: RedisCommands[String, String] = redisCommands
+    override val cache: Either[String, RedisCommands[String, String]] = getRedisCommands
   }
 
 }

@@ -27,7 +27,9 @@ class ConfCacheServiceGetAllKeysTest extends LifeCycleSupportCache {
 
     it("Can Get All Keys") {
 
-      val allKeys: util.List[String] = CakeConfCacheService.confCacheService.getAllKeys
+      val allKeys: util.List[String] = CakeConfCacheService.confCacheService.getAllKeys fold (
+        error => throw new IllegalStateException(error),
+        allKeys => allKeys)
 
       allKeys.size() should be(5)
       allKeys.contains("1") should be(true)

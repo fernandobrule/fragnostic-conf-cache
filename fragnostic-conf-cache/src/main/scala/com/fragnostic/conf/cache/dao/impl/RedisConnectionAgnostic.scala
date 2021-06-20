@@ -4,6 +4,6 @@ import io.lettuce.core.api.sync.RedisCommands
 
 trait RedisConnectionAgnostic {
 
-  val cache: RedisCommands[String, String]
+  val cache: Either[String, RedisCommands[String, String]]
 
 }
