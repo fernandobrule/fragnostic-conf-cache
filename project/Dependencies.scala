@@ -8,6 +8,6 @@ object Dependencies {
   lazy val scalatest =         "org.scalatest"    %% "scalatest"                  % "3.0.8" % "test"
   lazy val lettuce =           "io.lettuce"       %  "lettuce-core"               % "6.1.2.RELEASE"
 
-  lazy val fragnosticConfEnv = "com.fragnostic"   %  "fragnostic-conf-env_2.13"   % "0.1.4"
+  lazy val fragnosticConfEnv = "com.fragnostic"   %  "fragnostic-conf-env_2.13"   % "0.1.5"
 
 }
