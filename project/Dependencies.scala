@@ -3,7 +3,7 @@ import Keys._
 
 object Dependencies {
 
-  lazy val fragnosticConfEnv = "com.fragnostic"   %  "fragnostic-conf-env_2.13"   % "0.1.7"
+  lazy val fragnosticConfEnv = "com.fragnostic"   %  "fragnostic-conf-env_2.13"   % "0.1.8"
 
   lazy val lettuce =           "io.lettuce"       %  "lettuce-core"               % "6.1.2.RELEASE"
 
