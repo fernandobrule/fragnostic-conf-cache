@@ -28,8 +28,7 @@ class ConfCacheServiceGetStringTest extends LifeCycleSupportCache with KeyCompos
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueEsCl)
+      assertResult(opt.get)(valueEsCl)
     }
 
     it("Can Get Value As String es/CL from Cache") {
@@ -38,8 +37,7 @@ class ConfCacheServiceGetStringTest extends LifeCycleSupportCache with KeyCompos
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueEsCl)
+      assertResult(opt.get)(valueEsCl)
     }
 
     it("Can Get Value As String pt/BR from Cache") {
@@ -48,8 +46,7 @@ class ConfCacheServiceGetStringTest extends LifeCycleSupportCache with KeyCompos
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valuePtBr)
+      assertResult(opt.get)(valuePtBr)
     }
 
     it("Can Get Value As String en/US from Cache") {
@@ -58,8 +55,7 @@ class ConfCacheServiceGetStringTest extends LifeCycleSupportCache with KeyCompos
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueEnUs)
+      assertResult(opt.get)(valueEnUs)
     }
 
   }

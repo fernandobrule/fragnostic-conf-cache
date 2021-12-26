@@ -98,7 +98,7 @@ lazy val frgConfCache = Project(
     libraryDependencies ++= Seq(
       logbackClassic,
       slf4jApi,
-      scalatest,
+      scalatestFunSpec,
       fragnosticConfEnv,
       lettuce
     ),

@@ -21,8 +21,7 @@ class ConfCacheServiceGetLongTest extends LifeCycleSupportCache {
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueLong)
+      assertResult(opt.get)(valueLong)
 
     }
 

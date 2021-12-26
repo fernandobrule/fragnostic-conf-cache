@@ -21,8 +21,7 @@ class ConfCacheServiceGetBooleanTest extends LifeCycleSupportCache {
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueBoolean)
+      assertResult(opt.get)(valueBoolean)
 
     }
 

@@ -21,8 +21,7 @@ class ConfCacheServiceGetIntTest extends LifeCycleSupportCache {
         error => throw new IllegalStateException(error),
         opt => opt)
 
-      opt should not be None
-      opt.get should be(valueInt)
+      assertResult(opt.get)(valueInt)
 
     }
 
