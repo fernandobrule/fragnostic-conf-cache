@@ -17,11 +17,23 @@ class ConfCacheServiceGetBooleanTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Boolean from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getBoolean(key = keyBoolean) fold (
+      val value = CakeConfCacheService.confCacheService.getBoolean(key = keyBoolean) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      assertResult(opt.get)(valueBoolean)
+      assertResult(valueBoolean)(value)
+
+    }
+
+    it("Can Not Get Value As Boolean from Cache") {
+
+      val value = CakeConfCacheService.confCacheService.getBoolean(key = keyThatDoesNotExists) fold (
+        error => error,
+        value => value //
+      )
+
+      assertResult(valueThatNotExists)(value)
 
     }
 

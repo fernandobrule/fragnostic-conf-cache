@@ -7,6 +7,9 @@ import java.util.Locale
 
 trait LifeCycleSupportCache extends AnyFunSpec with BeforeAndAfterEach {
 
+  val keyThatDoesNotExists = "KEY_THAT_DOES_NOT_EXISTS"
+  val valueThatNotExists = "conf.cache.dao.redis.error.key__KEY_THAT_DOES_NOT_EXISTS__does.not.exists"
+
   //
   // es/CL
   //

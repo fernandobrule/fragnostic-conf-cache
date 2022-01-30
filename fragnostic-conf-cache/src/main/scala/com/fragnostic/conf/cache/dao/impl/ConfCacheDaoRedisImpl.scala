@@ -33,7 +33,7 @@ trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic
 
     override def set(key: String, value: Long): Either[String, String] = ???
 
-    override def get(key: String): Either[String, Option[String]] =
+    override def get(key: String): Either[String, String] =
       eitherCache.fold(
         error => Left(error),
         cache => Try(cache.get(key)) fold (
@@ -41,23 +41,25 @@ trait ConfCacheDaoRedisImpl extends ConfCacheDaoApi with RedisConnectionAgnostic
             logger.error(s"get() - error on try to retrieve key[$key], ${error.getMessage}")
             Left(error.getMessage)
           },
-          bulkReply => Right(Option(bulkReply))) //
+          bulkReply => Option(bulkReply) match {
+            case None => Left(s"conf.cache.dao.redis.error.key__${key}__does.not.exists")
+            case Some(value) => Right(value)
+          } //
+        ) //
       )
 
     override def del(key: String): Either[String, Option[String]] =
       get(key) fold (
         error => Left(error),
-        opt => opt map ( //
-          value => //
-            eitherCache fold (
-              error => Left(error),
-              cache => if (cache.del(key) == 1) {
-                Right(Option(value))
-              } else {
-                Left("redis.dao.del.error")
-              } //
-            ) //
-        ) getOrElse Right(None) //
+        value => //
+          eitherCache fold (
+            error => Left(error),
+            cache => if (cache.del(key) == 1) {
+              Right(Option(value))
+            } else {
+              Left("redis.dao.del.error")
+            } //
+          ) //
       )
 
     override def getAllKeys: Either[String, util.List[String]] =

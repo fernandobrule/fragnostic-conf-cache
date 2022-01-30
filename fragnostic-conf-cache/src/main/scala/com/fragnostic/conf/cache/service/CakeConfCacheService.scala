@@ -15,18 +15,14 @@ object CakeConfCacheService {
   private def getRedisHost: String =
     CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
       error => throw new IllegalStateException(error),
-      opt => opt map (host => host) getOrElse {
-        logger.error(s"redisCommands - It appears that you forget to set the REDIS_HOST environment variable")
-        throw new IllegalStateException("cake.conf.cache.error.host.does.not.exists")
-      })
+      host => host //
+    )
 
   private def getRedisPort: Int =
     CakeConfEnvService.confEnvService.getInt(key = "REDIS_PORT") fold (
       error => throw new IllegalStateException(error),
-      opt => opt map (port => port) getOrElse {
-        logger.error(s"redisCommands - It appears that you forget to set the REDIS_PORT environment variable")
-        throw new IllegalStateException("cake.conf.cache.error.port.does.not.exists")
-      })
+      port => port //
+    )
 
   private def getRedisCommands: Either[String, RedisCommands[String, String]] =
     try {
