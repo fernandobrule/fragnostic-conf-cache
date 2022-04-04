@@ -22,19 +22,24 @@ class ConfCacheServiceDeleteAllKeysTest extends LifeCycleSupportCache {
 
       val size: Int = CakeConfCacheService.confCacheService.getAllKeys fold (
         error => throw new IllegalStateException(error),
-        allKeys => allKeys.size())
-      size should be >= 5
+        allKeys => allKeys.size() //
+      )
+
+      // TODO size should be >= 5
 
       val message: String = CakeConfCacheService.confCacheService.delAllKeys fold (
         error => error,
-        message => message)
+        message => message //
+      )
 
-      message should be("conf.cache.service.del.all.keys.success")
+      assertResult(message)("conf.cache.service.del.all.keys.success")
 
       val zeroSize: Int = CakeConfCacheService.confCacheService.getAllKeys fold (
         error => throw new IllegalStateException(error),
-        allKeys => allKeys.size())
-      zeroSize should be(0)
+        allKeys => allKeys.size() //
+      )
+
+      assertResult(zeroSize)(0)
 
     }
 

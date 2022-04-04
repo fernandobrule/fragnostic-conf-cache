@@ -16,7 +16,7 @@ trait ConfCacheDaoApi {
 
     def set(key: String, value: Long): Either[String, String]
 
-    def get(key: String): Either[String, Option[String]]
+    def get(key: String): Either[String, String]
 
     def del(key: String): Either[String, Option[String]]
 
