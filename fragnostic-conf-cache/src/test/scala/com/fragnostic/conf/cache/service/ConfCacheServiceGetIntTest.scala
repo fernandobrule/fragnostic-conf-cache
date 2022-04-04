@@ -17,13 +17,22 @@ class ConfCacheServiceGetIntTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Int from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getInt(key = keyInt) fold (
+      val value = CakeConfCacheService.confCacheService.getInt(key = keyInt) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueInt)
+      assertResult(valueInt)(value)
+    }
 
+    it("Can Not Get Value As Int from Cache") {
+
+      val value = CakeConfCacheService.confCacheService.getInt(key = keyThatDoesNotExists) fold (
+        error => error,
+        value => value //
+      )
+
+      assertResult(valueThatNotExists)(value)
     }
 
   }

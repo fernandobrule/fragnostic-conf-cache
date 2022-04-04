@@ -17,12 +17,23 @@ class ConfCacheServiceGetLongTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Long from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getLong(key = keyLong) fold (
+      val value = CakeConfCacheService.confCacheService.getLong(key = keyLong) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueLong)
+      assertResult(valueLong)(value)
+
+    }
+
+    it("Can Not Get Value As Long from Cache") {
+
+      val value = CakeConfCacheService.confCacheService.getLong(key = keyThatDoesNotExists) fold (
+        error => error,
+        value => value //
+      )
+
+      assertResult(valueThatNotExists)(value)
 
     }
 

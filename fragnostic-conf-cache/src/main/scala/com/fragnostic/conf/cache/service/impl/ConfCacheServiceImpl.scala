@@ -16,28 +16,28 @@ trait ConfCacheServiceImpl extends ConfServiceApi {
 
     private val OK = "OK"
 
-    override def getString(key: String): Either[String, Option[String]] =
+    override def getString(key: String): Either[String, String] =
       confCacheCrud.get(key)
 
-    override def getString(locale: Locale, key: String): Either[String, Option[String]] =
+    override def getString(locale: Locale, key: String): Either[String, String] =
       confCacheCrud.get(compose(locale, key))
 
-    override def getShort(key: String): Either[String, Option[Short]] =
+    override def getShort(key: String): Either[String, Short] =
       getString(key) fold (
         error => Left(error),
         opt => toShort(opt))
 
-    override def getInt(key: String): Either[String, Option[Int]] =
+    override def getInt(key: String): Either[String, Int] =
       getString(key) fold (
         error => Left(error),
         opt => toInt(opt))
 
-    override def getLong(key: String): Either[String, Option[Long]] =
+    override def getLong(key: String): Either[String, Long] =
       getString(key) fold (
         error => Left(error),
         opt => toLong(opt))
 
-    override def getBoolean(key: String): Either[String, Option[Boolean]] =
+    override def getBoolean(key: String): Either[String, Boolean] =
       getString(key) fold (
         error => Left(error),
         opt => toBoolean(opt))

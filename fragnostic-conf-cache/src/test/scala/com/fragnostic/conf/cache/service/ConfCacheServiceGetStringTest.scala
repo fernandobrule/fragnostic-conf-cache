@@ -22,44 +22,54 @@ class ConfCacheServiceGetStringTest extends LifeCycleSupportCache with KeyCompos
 
   describe("***Conf Service Get String Test***") {
 
+    it("Can Not Get Value As String from Cache") {
+
+      val value = CakeConfCacheService.confCacheService.getString(key = keyThatDoesNotExists) fold (
+        error => error,
+        value => value //
+      )
+
+      assertResult(valueThatNotExists)(value)
+    }
+
     it("Can Get Value As String from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getString(key = keyEsCl) fold (
+      val value = CakeConfCacheService.confCacheService.getString(key = keyEsCl) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueEsCl)
+      assertResult(valueEsCl)(value)
     }
 
     it("Can Get Value As String es/CL from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getString(compose(Some(localeEsCl), keyEsCl)) fold (
+      val value = CakeConfCacheService.confCacheService.getString(compose(Some(localeEsCl), keyEsCl)) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueEsCl)
+      assertResult(valueEsCl)(value)
     }
 
     it("Can Get Value As String pt/BR from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getString(compose(Some(localePtBr), keyPtBr)) fold (
+      val value = CakeConfCacheService.confCacheService.getString(compose(Some(localePtBr), keyPtBr)) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valuePtBr)
+      assertResult(valuePtBr)(value)
     }
 
     it("Can Get Value As String en/US from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getString(compose(Some(localeEnUs), keyEnUs)) fold (
+      val value = CakeConfCacheService.confCacheService.getString(compose(Some(localeEnUs), keyEnUs)) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueEnUs)
+      assertResult(valueEnUs)(value)
     }
 
   }

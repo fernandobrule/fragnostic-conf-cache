@@ -31,12 +31,12 @@ class ConfCacheServiceGetAllKeysTest extends LifeCycleSupportCache {
         error => throw new IllegalStateException(error),
         allKeys => allKeys)
 
-      allKeys.size() should be(5)
-      allKeys.contains("1") should be(true)
-      allKeys.contains("2") should be(true)
-      allKeys.contains("3") should be(true)
-      allKeys.contains("4") should be(true)
-      allKeys.contains("5") should be(true)
+      assertResult(allKeys.size())(5)
+      assertResult(allKeys.contains("1"))(true)
+      assertResult(allKeys.contains("2"))(true)
+      assertResult(allKeys.contains("3"))(true)
+      assertResult(allKeys.contains("4"))(true)
+      assertResult(allKeys.contains("5"))(true)
 
     }
 

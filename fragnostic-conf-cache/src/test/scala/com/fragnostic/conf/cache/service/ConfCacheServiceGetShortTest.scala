@@ -17,12 +17,23 @@ class ConfCacheServiceGetShortTest extends LifeCycleSupportCache {
 
     it("Can Get Value As Short from Cache") {
 
-      val opt = CakeConfCacheService.confCacheService.getShort(key = keyShort) fold (
+      val value = CakeConfCacheService.confCacheService.getShort(key = keyShort) fold (
         error => throw new IllegalStateException(error),
-        opt => opt)
+        value => value //
+      )
 
-      opt should not be None
-      opt.get should be(valueShort)
+      assertResult(valueShort)(value)
+
+    }
+
+    it("Can Not Get Value As Short from Cache") {
+
+      val value = CakeConfCacheService.confCacheService.getShort(key = keyThatDoesNotExists) fold (
+        error => error,
+        value => value //
+      )
+
+      assertResult(valueThatNotExists)(value)
 
     }
 

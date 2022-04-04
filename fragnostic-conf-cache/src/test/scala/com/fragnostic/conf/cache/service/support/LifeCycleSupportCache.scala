@@ -2,11 +2,13 @@ package com.fragnostic.conf.cache.service.support
 
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funspec.AnyFunSpec
-import org.scalatest.matchers.should.Matchers
 
 import java.util.Locale
 
-trait LifeCycleSupportCache extends AnyFunSpec with Matchers with BeforeAndAfterEach {
+trait LifeCycleSupportCache extends AnyFunSpec with BeforeAndAfterEach {
+
+  val keyThatDoesNotExists = "KEY_THAT_DOES_NOT_EXISTS"
+  val valueThatNotExists = "conf.cache.dao.redis.error.key__KEY_THAT_DOES_NOT_EXISTS__does.not.exists"
 
   //
   // es/CL
