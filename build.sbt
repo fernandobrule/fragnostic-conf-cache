@@ -94,7 +94,6 @@ lazy val fragnosticConfCache = Project(
   base = file("fragnostic-conf-cache")).settings(fragnosticSettings ++ Seq(
   libraryDependencies ++= Seq(
     logbackClassic,
-    slf4jApi,
     scalatestFunSpec,
     fragnosticConfEnv,
     lettuce

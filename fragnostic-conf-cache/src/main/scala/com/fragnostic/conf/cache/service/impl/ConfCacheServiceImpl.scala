@@ -22,15 +22,26 @@ trait ConfCacheServiceImpl extends ConfServiceApi {
     override def getString(locale: Locale, key: String): Either[String, String] =
       confCacheCrud.get(compose(locale, key))
 
-    override def getShort(key: String): Either[String, Short] =
+    override def getShort(key: String): Either[String, Short] = {
       getString(key) fold (
         error => Left(error),
-        opt => toShort(opt))
+        opt => toShort(opt) //
+      )
+    }
 
-    override def getInt(key: String): Either[String, Int] =
+    override def getBigDecimal(key: String): Either[String, BigDecimal] = {
       getString(key) fold (
         error => Left(error),
-        opt => toInt(opt))
+        opt => toBigDecimal(opt) //
+      )
+    }
+
+    override def getInt(key: String): Either[String, Int] = {
+      getString(key) fold (
+        error => Left(error),
+        opt => toInt(opt) //
+      )
+    }
 
     override def getLong(key: String): Either[String, Long] =
       getString(key) fold (
