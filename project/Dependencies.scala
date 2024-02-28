@@ -6,6 +6,6 @@ object Dependencies {
 
   lazy val lettuce                    = "io.lettuce"            %  "lettuce-core"                  % "6.1.5.RELEASE"
   lazy val logbackClassic             = "ch.qos.logback"        % "logback-classic"                % "1.3.0-alpha12" % "runtime"
-  lazy val scalatestFunSpec           = "org.scalatest"        %% "scalatest-funspec"              % "3.3.0-SNAP3" % Test
+  lazy val scalatestFunSpec           = "org.scalatest"         % "scalatest-funspec_2.13"         % "3.3.0-SNAP3" % Test
 
 }

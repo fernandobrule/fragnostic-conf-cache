@@ -12,17 +12,19 @@ object CakeConfCacheService {
 
   private[this] val logger: Logger = LoggerFactory.getLogger("CakeConfCacheService")
 
-  private def getRedisHost: String =
-    CakeConfEnvService.confEnvService.getString(key = "REDIS_HOST") fold (
+  private def getRedisHost: String = {
+    CakeConfEnvService.confEnvService.getString(key = "FRG_REDIS_HOST") fold (
       error => throw new IllegalStateException(error),
       host => host //
     )
+  }
 
-  private def getRedisPort: Int =
-    CakeConfEnvService.confEnvService.getInt(key = "REDIS_PORT") fold (
+  private def getRedisPort: Int = {
+    CakeConfEnvService.confEnvService.getInt(key = "FRG_REDIS_PORT") fold (
       error => throw new IllegalStateException(error),
       port => port //
     )
+  }
 
   private def getRedisCommands: Either[String, RedisCommands[String, String]] =
     try {
