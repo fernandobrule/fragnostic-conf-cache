@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-export FRG_REDIS_HOST=localhost
-export FRG_REDIS_PORT=6379
-
+source ./environment.sh
 
 ./sbt -v -213
